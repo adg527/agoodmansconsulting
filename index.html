@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alan Goodman | A Goodman's Consulting LLC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0a1628; --navy-mid: #132244; --gold: #c9a84c; --gold-light: #e8c97a;
+      --white: #ffffff; --off-white: #f5f6f8; --gray: #8a93a6; --text: #1a2340;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--text); background: var(--white); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10,22,40,0.97); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 72px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .nav-logo { font-family: var(--font-display); font-size: 1.2rem; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta { background: var(--gold) !important; color: var(--navy) !important; padding: 8px 20px; border-radius: 2px; font-weight: 600 !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--white); display: block; }
+    .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(10,22,40,0.98); z-index: 999; padding: 2rem 5%; flex-direction: column; gap: 1.5rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 1.1rem; font-weight: 500; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    /* HERO */
+    #home { min-height: 100vh; background: var(--navy); display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 72px; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(30,52,96,0.8) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%); }
+    .hero-grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+    .hero-content { position: relative; z-index: 2; padding: 0 5%; max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.75rem; }
+    .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+    .hero-name { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; color: var(--white); line-height: 1.05; margin-bottom: 1rem; }
+    .hero-name span { color: var(--gold); }
+    .hero-tagline { font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.35rem); font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7); margin-bottom: 2rem; line-height: 1.5; }
+    .hero-description { font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 2.5rem; max-width: 480px; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { background: var(--gold); color: var(--navy); padding: 14px 32px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.2s; display: inline-block; border: none; cursor: pointer; }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); padding: 14px 32px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; transition: all 0.2s; display: inline-block; }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-photo-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
+    .hero-photo-frame { width: 100%; max-width: 420px; aspect-ratio: 3/4; position: relative; overflow: hidden; border: 1px solid rgba(201,168,76,0.3); }
+    .hero-photo-frame::before { content: ''; position: absolute; top: -16px; right: -16px; width: 100%; height: 100%; border: 1px solid rgba(201,168,76,0.15); z-index: 0; pointer-events: none; }
+    .hero-photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+    .hero-stats { position: absolute; bottom: -16px; left: -16px; background: var(--gold); padding: 1.2rem 1.5rem; }
+    .hero-stats-num { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--navy); line-height: 1; }
+    .hero-stats-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); }
+
+    /* WHITE HOUSE BANNER */
+    .wh-banner { background: var(--navy); position: relative; overflow: hidden; }
+    .wh-banner-inner { max-width: 1200px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 380px; gap: 4rem; }
+    .wh-banner-photo { position: relative; height: 380px; overflow: hidden; }
+    .wh-banner-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; filter: brightness(0.92); }
+    .wh-banner-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, var(--navy) 100%); }
+    .wh-banner-text { position: relative; z-index: 2; padding: 3rem 0; }
+    .wh-eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .wh-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .wh-heading { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 1rem; }
+    .wh-sub { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+    .wh-detail { display: flex; flex-direction: column; gap: 0.6rem; }
+    .wh-detail-item { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 0.5rem; }
+    .wh-detail-item::before { content: ''; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    .credential-strip { background: var(--off-white); border-top: 1px solid rgba(10,22,40,0.08); border-bottom: 1px solid rgba(10,22,40,0.08); padding: 1.2rem 5%; display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+    .cred-item { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); display: flex; align-items: center; gap: 0.5rem; }
+    .cred-item::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+    /* SECTIONS */
+    section { padding: 100px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+    .section-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; color: var(--navy); line-height: 1.15; margin-bottom: 1.5rem; }
+    .section-body { font-size: 1.05rem; line-height: 1.85; color: #4a5568; max-width: 680px; }
+
+    /* PROBLEMS */
+    .problems-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .problem-card { background: var(--white); border: 1px solid rgba(10,22,40,0.08); padding: 2rem 1.5rem; transition: all 0.3s; }
+    .problem-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(10,22,40,0.08); }
+    .problem-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .problem-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; line-height: 1.3; }
+    .problem-desc { font-size: 0.875rem; color: #6b7280; line-height: 1.6; }
+
+    /* RESULTS */
+    .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+    .result-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); padding: 2rem; transition: all 0.3s; }
+    .result-card:hover { background: rgba(201,168,76,0.06); border-color: var(--gold); }
+    .result-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .result-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: 1rem; line-height: 1.3; }
+    .result-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .result-bullets li { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.5; padding-left: 1rem; position: relative; }
+    .result-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 0.75rem; }
+    .why-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); padding: 3rem; }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .expect-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .expect-list li { font-size: 1rem; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 0.75rem; }
+    .expect-check { color: var(--gold); font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+    #about { background: var(--white); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+    .about-photo { width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+    .about-accent { position: absolute; bottom: 0; right: 0; width: 80px; height: 80px; background: var(--gold); }
+    .about-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+    .highlight-card { border-left: 3px solid var(--gold); padding-left: 1.2rem; }
+    .highlight-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.3rem; }
+    .highlight-value { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+
+    /* SPEAKING */
+    #speaking { background: var(--navy); }
+    #speaking .section-title { color: var(--white); }
+    #speaking .section-body { color: rgba(255,255,255,0.65); }
+    .speaking-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 3rem 0; }
+    .speaking-photo { aspect-ratio: 4/3; overflow: hidden; position: relative; }
+    .speaking-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s; display: block; }
+    .speaking-photo:hover img { transform: scale(1.04); }
+    .speaking-photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(10,22,40,0.85) 0%, transparent 100%); padding: 1.5rem 1rem 0.75rem; color: rgba(255,255,255,0.9); font-size: 0.8rem; font-weight: 500; }
+    .speaking-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+    .topic-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); padding: 2.5rem 2rem; transition: all 0.3s; }
+    .topic-card:hover { background: rgba(201,168,76,0.06); border-color: var(--gold); transform: translateY(-4px); }
+    .topic-num { font-family: var(--font-display); font-size: 3rem; font-weight: 900; color: rgba(201,168,76,0.2); line-height: 1; margin-bottom: 1.2rem; }
+    .topic-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--white); margin-bottom: 0.8rem; line-height: 1.3; }
+    .topic-desc { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+    .speaking-logos { margin-top: 4rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; }
+    .logos-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; text-align: center; }
+    .logos-row { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; justify-content: center; align-items: center; }
+    .logo-pill { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1); padding: 6px 16px; border-radius: 20px; }
+
+    /* CONSULTING */
+    #consulting { background: var(--off-white); }
+    .consulting-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 5rem; align-items: start; margin-top: 3rem; }
+    .service-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .service-item { background: var(--white); border: 1px solid rgba(10,22,40,0.08); padding: 1.8rem 2rem; display: flex; gap: 1.5rem; align-items: flex-start; transition: box-shadow 0.2s; }
+    .service-item:hover { box-shadow: 0 4px 24px rgba(10,22,40,0.08); }
+    .service-icon { width: 40px; height: 40px; background: var(--navy); border-radius: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .service-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .service-desc { font-size: 0.9rem; color: #6b7280; line-height: 1.6; }
+    .consulting-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .consulting-photo { aspect-ratio: 4/3; overflow: hidden; }
+    .consulting-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .oet-card { background: var(--navy); padding: 3rem; position: sticky; top: 100px; }
+    .oet-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .oet-subtitle { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; }
+    .oet-steps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .oet-step { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .oet-letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 900; color: var(--gold); line-height: 1; min-width: 40px; }
+    .oet-step-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.25rem; }
+    .oet-step-desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    /* 45 MINUTES */
+    #workshop { background: var(--navy); position: relative; overflow: hidden; }
+    .workshop-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 70% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%); }
+    .workshop-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    #workshop .section-title { color: var(--white); }
+    .workshop-number { font-family: var(--font-display); font-size: clamp(5rem, 12vw, 10rem); font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(201,168,76,0.25); line-height: 0.9; margin-bottom: -1rem; }
+    .workshop-desc { font-size: 1.05rem; color: rgba(255,255,255,0.65); line-height: 1.8; margin-bottom: 1.5rem; }
+    .workshop-bullets { list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
+    .workshop-bullets li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+    .workshop-bullets li::before { content: '→'; color: var(--gold); font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+    .aarp-quote { background: rgba(255,255,255,0.04); border-left: 3px solid var(--gold); padding: 1.5rem 1.8rem; margin-bottom: 2rem; }
+    .aarp-quote-text { font-family: var(--font-display); font-style: italic; font-size: 1rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 0.75rem; }
+    .aarp-quote-attr { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .daymond-feature { position: relative; margin-bottom: 2rem; }
+    .daymond-img { width: 100%; border: 1px solid rgba(201,168,76,0.3); display: block; }
+    .daymond-caption { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25); border-top: none; padding: 1rem 1.2rem; }
+    .daymond-caption-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--gold); margin-bottom: 0.25rem; }
+    .daymond-caption-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .waitlist-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.3); padding: 2.5rem; }
+    .waitlist-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .waitlist-heading { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; line-height: 1.2; }
+    .waitlist-sub { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 2rem; }
+    .waitlist-form { display: flex; flex-direction: column; gap: 1rem; }
+    .waitlist-form input, .waitlist-form select { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: var(--white); padding: 14px 16px; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: border-color 0.2s; border-radius: 2px; }
+    .waitlist-form input::placeholder { color: rgba(255,255,255,0.35); }
+    .waitlist-form input:focus, .waitlist-form select:focus { border-color: var(--gold); }
+    .waitlist-form select option { background: var(--navy); }
+
+    /* MEDIA */
+    #media { background: var(--white); }
+    .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+    .media-card { aspect-ratio: 4/3; position: relative; overflow: hidden; cursor: pointer; background: var(--off-white); }
+    .media-card img { width: 100%; height: 100%; object-fit: cover; object-position: center center; transition: transform 0.4s; display: block; }
+    .media-card:hover img { transform: scale(1.05); }
+    .media-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,22,40,0.75) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1.2rem; }
+    .media-card:hover .media-overlay { opacity: 1; }
+    .media-caption { color: var(--white); font-size: 0.85rem; font-weight: 500; }
+
+    /* BUCKS FEATURED VIDEO */
+    .bucks-feature { margin-top: 4rem; background: var(--navy); border: 1px solid rgba(201,168,76,0.3); overflow: hidden; }
+    .bucks-feature-header { padding: 2rem 2.5rem 1.5rem; }
+    .bucks-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold); color: var(--navy); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; border-radius: 2px; margin-bottom: 0.75rem; }
+    .bucks-feature-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 0.5rem; }
+    .bucks-feature-sub { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .bucks-video-wrap { position: relative; aspect-ratio: 16/9; background: #000; width: 100%; }
+    .bucks-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    /* VIDEO GRID */
+    .video-section { margin-top: 4rem; }
+    .video-section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .video-section-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .video-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #000; border: 1px solid rgba(10,22,40,0.1); }
+    .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-label { font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-top: 0.6rem; line-height: 1.4; }
+
+    /* PODCAST */
+    .podcast-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(10,22,40,0.08); }
+    .podcast-section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .podcast-section-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .podcast-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .podcast-card { border: 1px solid rgba(10,22,40,0.1); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: box-shadow 0.2s; }
+    .podcast-card:hover { box-shadow: 0 4px 20px rgba(10,22,40,0.1); }
+    .podcast-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .podcast-show { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+    .podcast-title { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--navy); line-height: 1.4; }
+    .podcast-listen { font-size: 0.8rem; font-weight: 600; color: var(--navy); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: auto; border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+
+    /* PRESS STRIP */
+    .press-strip { background: var(--navy); padding: 3rem 5%; }
+    .press-inner { max-width: 1200px; margin: 0 auto; }
+    .press-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; text-align: center; }
+    .press-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .press-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; transition: border-color 0.2s; }
+    .press-card:hover { border-color: rgba(201,168,76,0.4); }
+    .press-outlet { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+    .press-headline { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--white); line-height: 1.4; }
+    .press-year { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 0.5rem; }
+
+    .media-cta { margin-top: 3rem; background: var(--off-white); border: 1px solid rgba(10,22,40,0.1); padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .media-cta-text { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--navy); }
+    .media-cta-sub { font-size: 0.9rem; color: var(--gray); margin-top: 0.25rem; }
+
+    /* CONTACT */
+    #contact { background: var(--navy); }
+    #contact .section-title { color: var(--white); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+    .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .contact-icon { width: 44px; height: 44px; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .contact-value { font-size: 1rem; color: rgba(255,255,255,0.8); }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-form input, .contact-form select, .contact-form textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--white); padding: 14px 16px; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: border-color 0.2s; border-radius: 2px; width: 100%; }
+    .contact-form select option { background: var(--navy); }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { border-color: var(--gold); }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+
+    /* FOOTER */
+    footer { background: #070f1e; padding: 3rem 5%; border-top: 1px solid rgba(201,168,76,0.15); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.1rem; color: var(--white); }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-size: 0.8rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ANIMATIONS */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .problems-grid { grid-template-columns: 1fr 1fr; }
+      .results-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .hero-photo-wrap { display: none; }
+      .speaking-grid, .speaking-photos { grid-template-columns: 1fr 1fr; }
+      .media-grid, .video-grid, .podcast-grid { grid-template-columns: 1fr 1fr; }
+      .press-cards { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 70px 5%; }
+      .speaking-grid, .speaking-photos, .media-grid, .video-grid, .consulting-photos, .press-cards, .podcast-grid, .problems-grid, .results-grid { grid-template-columns: 1fr; }
+      .about-highlights, .form-row { grid-template-columns: 1fr; }
+      .credential-strip { gap: 1.5rem; }
+      .hero-btns, .media-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">A <span>Goodman's</span> Consulting</a>
+  <ul class="nav-links">
+    <li><a href="#problems">Problems</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#speaking">Speaking</a></li>
+    <li><a href="#consulting">Consulting</a></li>
+    <li><a href="#media">Media</a></li>
+    <li><a href="#contact" class="nav-cta">Book Alan</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#problems" onclick="toggleMenu()">Problems I Solve</a>
+  <a href="#results" onclick="toggleMenu()">Results</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#speaking" onclick="toggleMenu()">Speaking</a>
+  <a href="#consulting" onclick="toggleMenu()">Consulting</a>
+  <a href="#media" onclick="toggleMenu()">Media</a>
+  <a href="#contact" onclick="toggleMenu()">Book Alan</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Fractional COO · Speaker · Strategist</div>
+      <h1 class="hero-name">Alan<br /><span>Goodman</span></h1>
+      <p class="hero-tagline">"Operate with purpose. Build like you own it."</p>
+      <p class="hero-description">25+ years turning operational chaos into sustainable growth — for Fortune 500s, growing businesses, and the leaders bold enough to build something that lasts.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-primary">Book a Consultation</a>
+        <a href="https://agoodmansdesserts.com" class="btn-outline" target="_blank">Visit A Goodman's Desserts</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-frame">
+        <img src="hero.jpeg" alt="Alan Goodman" />
+      </div>
+      <div class="hero-stats">
+        <span class="hero-stats-num">25+</span>
+        <span class="hero-stats-label">Years of Impact</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDENTIAL STRIP -->
+<div class="credential-strip">
+  <div class="cred-item">Lean Six Sigma Black Belt (GE)</div>
+  <div class="cred-item">MBA · Temple University</div>
+  <div class="cred-item">GE Hi-Po · Crotonville Alumni</div>
+  <div class="cred-item">Fractional COO · A Goodman's Consulting LLC</div>
+  <div class="cred-item">White House Business Briefing Invitee</div>
+  <div class="cred-item">National Keynote Speaker</div>
+</div>
+
+<!-- WHITE HOUSE CREDENTIAL BANNER -->
+<div class="wh-banner">
+  <div class="wh-banner-inner">
+    <div class="wh-banner-photo">
+      <img src="whitehouse1.jpeg" alt="Alan Goodman at The White House" />
+    </div>
+    <div class="wh-banner-text fade-up">
+      <div class="wh-eyebrow">Presidential Recognition</div>
+      <h2 class="wh-heading">Invited to The White House Midwest Regional Business Briefing</h2>
+      <p class="wh-sub">Alan was selected as one of a limited number of Midwest business leaders invited to the Eisenhower Executive Office Building for a White House Business Briefing — a recognition of his impact as an entrepreneur and community leader.</p>
+      <div class="wh-detail">
+        <div class="wh-detail-item">Eisenhower Executive Office Building · Room 350</div>
+        <div class="wh-detail-item">White House Midwest Regional Business Briefing</div>
+        <div class="wh-detail-item">Friday, May 31, 2024 · Washington D.C.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOUND FAMILIAR -->
+<section id="problems" style="background:var(--off-white);">
+  <div class="section-inner">
+    <div class="section-eyebrow">Problems I Solve</div>
+    <h2 class="section-title">Sound Familiar?</h2>
+    <p class="section-body" style="margin-bottom:3rem;">If any of these describe your organization right now — we should talk.</p>
+    <div class="problems-grid fade-up">
+      <div class="problem-card">
+        <div class="problem-icon">⚡</div>
+        <div class="problem-title">Operations That Have Become Reactive Instead of Strategic</div>
+        <div class="problem-desc">Your team is constantly putting out fires. Planning feels impossible because execution keeps breaking down.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📈</div>
+        <div class="problem-title">Growth That Has Outpaced Systems and Infrastructure</div>
+        <div class="problem-desc">You've scaled fast — but your processes, people, and technology haven't kept up. Every new win creates new chaos.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💰</div>
+        <div class="problem-title">Declining Profitability or Rising Operating Costs</div>
+        <div class="problem-desc">The revenue is there but the margins aren't. Waste, rework, and inefficiency are costing you more than you realize.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🤝</div>
+        <div class="problem-title">Customer Experience Challenges</div>
+        <div class="problem-desc">Clients are frustrated. Promises aren't being kept. And the operational gaps are starting to affect your reputation.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🏢</div>
+        <div class="problem-title">Departments Operating in Silos</div>
+        <div class="problem-desc">Sales, operations, finance, and HR aren't talking. Decisions get made in isolation and the organization pays the price.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🗺️</div>
+        <div class="problem-title">Strategic Plans That Aren't Being Executed</div>
+        <div class="problem-desc">You have a vision and a plan. But 90 days later, nothing has moved. The gap between strategy and execution is costing you.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">👥</div>
+        <div class="problem-title">Leadership Teams Lacking Accountability</div>
+        <div class="problem-desc">Meetings happen. Action items get assigned. But follow-through is inconsistent and results are unpredictable.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🚀</div>
+        <div class="problem-title">Organizations Preparing for Growth, Transition, or Transformation</div>
+        <div class="problem-desc">You're at an inflection point — acquisition, expansion, leadership change, or a major pivot. You need an experienced operational hand.</div>
+      </div>
+    </div>
+    <div style="margin-top:3rem;text-align:center;">
+      <p style="font-family:var(--font-display);font-size:1.3rem;font-style:italic;color:var(--navy);margin-bottom:1.5rem;">"If any of these sound like your organization — that's exactly where I do my best work."</p>
+      <a href="#contact" class="btn-primary" style="background:var(--navy);color:var(--white);">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" style="background:var(--navy);">
+  <div class="section-inner">
+    <div class="section-eyebrow" style="color:var(--gold);">Selected Business Results</div>
+    <h2 class="section-title" style="color:var(--white);">30+ Years of Measurable Impact</h2>
+    <p class="section-body" style="color:rgba(255,255,255,0.65);margin-bottom:3rem;">These results were delivered across Fortune 500 companies, healthcare systems, higher education institutions, nonprofits, and entrepreneurial ventures over a 30+ year career in operational leadership.</p>
+
+    <div class="results-grid fade-up">
+      <div class="result-card">
+        <div class="result-icon">📊</div>
+        <div class="result-title">Delivered Financial Impact</div>
+        <ul class="result-bullets">
+          <li>$2M+ validated operational savings</li>
+          <li>$500K technology integration savings</li>
+          <li>$50M accelerated cash flow improvements</li>
+          <li>$31M+ combined project impact across Lean Six Sigma initiatives</li>
+        </ul>
+      </div>
+      <div class="result-card">
+        <div class="result-icon">🔄</div>
+        <div class="result-title">Turned Around Underperforming Operations</div>
+        <ul class="result-bullets">
+          <li>Led a commercial business unit to its first net profit</li>
+          <li>Doubled revenue through a critical client turnaround</li>
+          <li>Improved operational execution through leadership alignment</li>
+        </ul>
+      </div>
+      <div class="result-card">
+        <div class="result-icon">🤝</div>
+        <div class="result-title">Protected Strategic Relationships</div>
+        <ul class="result-bullets">
+          <li>Saved a $4.5M customer relationship in the first 30 days</li>
+          <li>Resolved high-risk client implementations</li>
+          <li>Improved customer retention through operational excellence</li>
+        </ul>
+      </div>
+      <div class="result-card">
+        <div class="result-icon">🏆</div>
+        <div class="result-title">Built High-Performance Organizations</div>
+        <ul class="result-bullets">
+          <li>Enterprise Lean transformation across multiple organizations</li>
+          <li>Executive governance systems and leadership coaching</li>
+          <li>200+ professionals trained in operational excellence</li>
+          <li>Sustainable operating systems built to outlast the engagement</li>
+        </ul>
+      </div>
+      <div class="result-card">
+        <div class="result-icon">⚙️</div>
+        <div class="result-title">Led Complex Enterprise Initiatives</div>
+        <ul class="result-bullets">
+          <li>$500M acquisition support</li>
+          <li>Cross-functional transformations</li>
+          <li>Technology implementations and finance modernization</li>
+          <li>Multi-site operational consolidation</li>
+        </ul>
+      </div>
+      <div class="result-card">
+        <div class="result-icon">🌐</div>
+        <div class="result-title">Executive Leadership Experience Across Sectors</div>
+        <ul class="result-bullets">
+          <li>Fortune 500 · Healthcare · Higher Education</li>
+          <li>Government · Nonprofit · Entrepreneurship</li>
+          <li>Board Governance · Manufacturing · Professional Services</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WHY CLIENTS CHOOSE ME -->
+    <div class="why-card fade-up">
+      <div class="why-grid">
+        <div>
+          <div class="section-eyebrow" style="color:var(--gold);">Why Clients Choose Me</div>
+          <h3 style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--white);margin-bottom:1.5rem;line-height:1.2;">Unlike many consultants, I've been responsible for operating businesses — not simply advising them.</h3>
+          <p style="font-size:1rem;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:1.5rem;">I've managed P&Ls, led executive teams, built departments, rescued struggling operations, launched new business initiatives, coached leaders, and owned business results. That means my recommendations are practical, executable, and designed to create measurable impact — not lengthy reports that sit on a shelf.</p>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:1.5rem;">What You Can Expect</div>
+          <ul class="expect-list">
+            <li><span class="expect-check">✔</span> Learn the business quickly</li>
+            <li><span class="expect-check">✔</span> Build trust with leadership</li>
+            <li><span class="expect-check">✔</span> Identify root causes — not symptoms</li>
+            <li><span class="expect-check">✔</span> Prioritize what matters most</li>
+            <li><span class="expect-check">✔</span> Execute alongside your team</li>
+            <li><span class="expect-check">✔</span> Leave the organization stronger than when I arrived</li>
+          </ul>
+          <div style="margin-top:2rem;">
+            <a href="#contact" class="btn-primary">Start the Conversation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-photo fade-up">
+        <img src="headshot.jpeg" alt="Alan Goodman" />
+        <div class="about-accent"></div>
+      </div>
+      <div class="fade-up" style="padding-top:0.5rem;">
+        <div class="section-eyebrow">About Alan</div>
+        <h2 class="section-title">Built from the Inside Out</h2>
+        <p class="section-body">Alan Goodman is a Milwaukee-based Fractional COO, operational excellence strategist, and national keynote speaker whose career spans Fortune 500 boardrooms, entrepreneurial ventures, and transformational consulting engagements serving organizations across manufacturing, education, professional services, and beyond.</p>
+        <br />
+        <p class="section-body">As a GE-certified Lean Six Sigma Black Belt and graduate of the Jack Welch Leadership Institute at Crotonville, Alan brings an elite operational framework to every engagement. He is a national keynote speaker, AARP Make Your Move grant winner, and White House Business Briefing invitee whose story has been featured in BizTimes Milwaukee, the Milwaukee Journal Sentinel, and on WISN-TV ABC.</p>
+        <br />
+        <p class="section-body">As founder and principal of A Goodman's Consulting LLC, Alan serves as a Fractional COO for growing businesses — embedding with leadership teams to build the systems, culture, and operational capacity needed to scale with purpose.</p>
+        <br />
+        <p class="section-body">Alan is also an active civic leader — serving as an elected board member of Crime Stoppers of Milwaukee and Commissioner on the Milwaukee County Commission on Aging, appointed positions he holds as an extension of his commitment to community impact.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;">
+          <div style="overflow:hidden;aspect-ratio:4/3;">
+            <img src="swearing_in.jpeg" alt="Alan Goodman sworn in as Commissioner" style="width:100%;height:100%;object-fit:cover;object-position:top;" />
+          </div>
+          <div style="overflow:hidden;aspect-ratio:4/3;">
+            <img src="nbmbaa.jpeg" alt="National Black MBA Association" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--gray);margin-top:0.5rem;">Left: Sworn in as Milwaukee County Commissioner · Right: National Black MBA Association, Philadelphia Chapter — early career</p>
+        <div class="about-highlights">
+          <div class="highlight-card">
+            <div class="highlight-label">Education</div>
+            <div class="highlight-value">MBA, Temple University · B.S., Hampton University</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-label">Certification</div>
+            <div class="highlight-value">Lean Six Sigma Black Belt · GE Capital</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-label">Current Role</div>
+            <div class="highlight-value">Fractional COO · Founder, A Goodman's Consulting LLC</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-label">Based In</div>
+            <div class="highlight-value">Milwaukee, Wisconsin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKING -->
+<section id="speaking">
+  <div class="section-inner">
+    <div class="section-eyebrow" style="color:var(--gold)">Keynote Speaking</div>
+    <h2 class="section-title">Ideas That Move Organizations</h2>
+    <p class="section-body">From AME International to the White House, Alan delivers high-impact keynotes that blend operational expertise with real-world stories — leaving audiences with frameworks they can use the next morning.</p>
+
+    <div class="speaking-photos fade-up">
+      <div class="speaking-photo">
+        <img src="bp4opx.jpeg" alt="Best Practices for OpEx" />
+        <div class="speaking-photo-caption">Best Practices for OpEx Conference</div>
+      </div>
+      <div class="speaking-photo">
+        <img src="stage_speaking.jpeg" alt="Alan Goodman on stage" />
+        <div class="speaking-photo-caption">Keynote · Main Stage</div>
+      </div>
+      <div class="speaking-photo">
+        <img src="panel_speaking.jpeg" alt="Alan Goodman panel discussion" />
+        <div class="speaking-photo-caption">Panel Moderator · Leadership Forum</div>
+      </div>
+    </div>
+
+    <div class="speaking-grid fade-up">
+      <div class="topic-card">
+        <div class="topic-num">01</div>
+        <div class="topic-title">Build It Like You Own It</div>
+        <div class="topic-desc">The entrepreneurial mindset that transforms employees into builders and organizations into movements. Rooted in Alan's OET Method — Operate, Entrepreneurialize, Transform.</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">02</div>
+        <div class="topic-title">Operational Excellence for Real People</div>
+        <div class="topic-desc">Making Lean Six Sigma human. How any organization — regardless of size or sector — can build systems that sustain performance without burning people out.</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">03</div>
+        <div class="topic-title">45 Minutes That Changed My Business</div>
+        <div class="topic-desc">The story of one pivotal mentorship session with Shark Tank investor Daymond John and the principles it unlocked. <a href="https://agoodmansdesserts.com" target="_blank" style="color:var(--gold);text-decoration:underline;">Learn more at agoodmansdesserts.com →</a></div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">04</div>
+        <div class="topic-title">Leading Through Transition</div>
+        <div class="topic-desc">Navigating workforce change, institutional transformation, and personal reinvention with clarity, courage, and a plan — built from 25+ years of leading through disruption.</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">05</div>
+        <div class="topic-title">The Educator as Entrepreneur</div>
+        <div class="topic-desc">How educators and institutional leaders can apply entrepreneurial thinking to curriculum, culture, and community impact — without losing the mission.</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">06</div>
+        <div class="topic-title">Custom Keynote</div>
+        <div class="topic-desc">Alan works directly with event planners to craft a keynote aligned to your theme, audience, and outcomes. Every engagement is built from scratch.</div>
+      </div>
+    </div>
+
+    <div class="speaking-logos fade-up">
+      <div class="logos-label">Past &amp; Featured Engagements</div>
+      <div class="logos-row">
+        <span class="logo-pill">AME International Conference</span>
+        <span class="logo-pill">Lean Enterprise Institute</span>
+        <span class="logo-pill">Lean Summit 2024</span>
+        <span class="logo-pill">Best Practices for OpEx</span>
+        <span class="logo-pill">MoreSteam</span>
+        <span class="logo-pill">GE Capital</span>
+        <span class="logo-pill">Milwaukee Bucks Foundation</span>
+        <span class="logo-pill">Marquette University</span>
+        <span class="logo-pill">BMO EMpower Luncheon</span>
+        <span class="logo-pill">BizTimes Milwaukee</span>
+        <span class="logo-pill">White House Business Briefing</span>
+        <span class="logo-pill">Greater Milwaukee Urban League</span>
+        <span class="logo-pill">BizStarts Milwaukee</span>
+        <span class="logo-pill">WISN ABC 12</span>
+      </div>
+    </div>
+    <div style="margin-top:3rem;"><a href="#contact" class="btn-primary">Inquire About Speaking</a></div>
+  </div>
+</section>
+
+<!-- CONSULTING -->
+<section id="consulting">
+  <div class="section-inner">
+    <div class="section-eyebrow">Fractional COO · Consulting</div>
+    <h2 class="section-title">The Operational Edge Your Organization Needs</h2>
+    <p class="section-body">A Goodman's Consulting LLC partners with small businesses and educational institutions on retainer-based engagements — bringing Fortune 500 operational discipline to organizations ready to scale with purpose.</p>
+    <div class="consulting-grid">
+      <div>
+        <div class="service-list fade-up">
+          <div class="service-item">
+            <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+            <div><div class="service-name">Fractional COO Services</div><div class="service-desc">Part-time, high-impact operational leadership. Alan embeds with your team to streamline processes, build systems, and drive performance — without the full-time executive cost.</div></div>
+          </div>
+          <div class="service-item">
+            <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+            <div><div class="service-name">Operational Excellence (OPEX)</div><div class="service-desc">Lean Six Sigma-driven process improvement that eliminates waste, reduces costs, and builds the operational foundation for sustainable growth.</div></div>
+          </div>
+          <div class="service-item">
+            <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div><div class="service-name">Leadership Development</div><div class="service-desc">Building the management capacity of your team through structured coaching, frameworks, and accountability systems that scale with your organization.</div></div>
+          </div>
+          <div class="service-item">
+            <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1"/><path d="M15 3H7a2 2 0 00-2 2v6a2 2 0 002 2h2l4 4V11h2a2 2 0 002-2V5a2 2 0 00-2-2z"/></svg></div>
+            <div><div class="service-name">Workforce Development Strategy</div><div class="service-desc">Designing the talent pipelines, training programs, and institutional frameworks that build the next generation of operational leaders — from onboarding systems to STEM program development at scale.</div></div>
+          </div>
+        </div>
+        <div class="consulting-photos fade-up">
+          <div class="consulting-photo"><img src="consulting2.jpeg" alt="Workshop session" /></div>
+          <div class="consulting-photo"><img src="bp4opx2.jpeg" alt="Consulting session" /></div>
+        </div>
+      </div>
+      <div class="oet-card fade-up">
+        <div class="oet-title">The OET Method™</div>
+        <div class="oet-subtitle">Alan's Proven Framework</div>
+        <div class="oet-steps">
+          <div class="oet-step"><div class="oet-letter">O</div><div><div class="oet-step-name">Operate</div><div class="oet-step-desc">Assess current state, identify inefficiencies, and stabilize core operations with proven Lean Six Sigma tools.</div></div></div>
+          <div class="oet-step"><div class="oet-letter">E</div><div><div class="oet-step-name">Entrepreneurialize</div><div class="oet-step-desc">Install an ownership mindset across your team — turning employees into builders and managers into entrepreneurs.</div></div></div>
+          <div class="oet-step"><div class="oet-letter">T</div><div><div class="oet-step-name">Transform</div><div class="oet-step-desc">Execute sustainable change that scales — building the systems, culture, and leadership capacity for long-term growth.</div></div></div>
+        </div>
+        <div style="margin-top:2rem;"><a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block;">Start a Conversation</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- MEDIA -->
+<section id="media">
+  <div class="section-inner">
+    <div class="section-eyebrow">Media &amp; Press</div>
+    <h2 class="section-title">Alan in Action</h2>
+    <p class="section-body">From national keynote stages to the White House, AME International, and network TV — Alan brings the same energy to every platform.</p>
+
+    <div class="media-grid fade-up">
+      <div class="media-card"><img src="whitehouse1.jpeg" alt="White House" /><div class="media-overlay"><span class="media-caption">The White House · Washington D.C.</span></div></div>
+      <div class="media-card"><img src="whitehouse3.jpeg" alt="White House Business Briefing" /><div class="media-overlay"><span class="media-caption">White House Midwest Business Briefing · 2024</span></div></div>
+      <div class="media-card"><img src="whitehouse2.jpeg" alt="White House nameplate" /><div class="media-overlay"><span class="media-caption">Eisenhower Executive Office Building</span></div></div>
+      <div class="media-card"><img src="bmopanel.jpeg" alt="BMO EMpower panel" /><div class="media-overlay"><span class="media-caption">BMO EMpower Business Luncheon</span></div></div>
+      <div class="media-card"><img src="headshot2.jpeg" alt="Alan Goodman professional photo" /><div class="media-overlay"><span class="media-caption">Alan Goodman · Professional Photo</span></div></div>
+      <div class="media-card"><img src="mens_conference.jpeg" alt="Men's Conference Keynote" /><div class="media-overlay"><span class="media-caption">Men's Conference · Keynote Speaker</span></div></div>
+      <div class="media-card"><img src="podcast.png" alt="Real Food Brands Podcast" /><div class="media-overlay"><span class="media-caption">Real Food Brands Podcast · Ep. 80</span></div></div>
+      <div class="media-card"><img src="leansummit.jpeg" alt="Lean Summit 2024" /><div class="media-overlay"><span class="media-caption">Lean Summit 2024 · Learning Session</span></div></div>
+      <div class="media-card"><img src="ame_sign.jpeg" alt="AME International" /><div class="media-overlay"><span class="media-caption">AME International Conference · Cleveland 2023</span></div></div>
+      <div class="media-card"><img src="liberty_bell.jpeg" alt="Advocating at Wisconsin State Capitol" /><div class="media-overlay"><span class="media-caption">Advocating at the Wisconsin State Capitol</span></div></div>
+    </div>
+
+    <!-- BUCKS FEATURED VIDEO -->
+    <div class="bucks-feature fade-up">
+      <div class="bucks-feature-header">
+        <div class="bucks-badge">⭐ Featured in Media</div>
+        <div class="bucks-feature-title">Alan Goodman · Featured in Milwaukee Bucks &amp; Hennessy Commercial</div>
+        <div class="bucks-feature-sub">Alan's entrepreneurial journey recognized and featured in a Milwaukee Bucks commercial — a testament to 25 years of building businesses with purpose and discipline.</div>
+      </div>
+      <div class="bucks-video-wrap">
+        <iframe src="https://www.youtube.com/embed/hLmQKRPlR_U" title="Milwaukee Bucks & Hennessy Commercial" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- VIDEO GRID -->
+    <div class="video-section fade-up">
+      <div class="video-section-label">Watch Alan in Action</div>
+      <div style="margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+        <div>
+          <div style="position:relative;aspect-ratio:9/16;overflow:hidden;background:#000;border:1px solid rgba(10,22,40,0.1);">
+            <iframe src="https://www.youtube.com/embed/vDHqQJcmJvA" title="BizStarts Milwaukee Speaking" allowfullscreen loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
+          </div>
+          <div style="font-size:0.8rem;font-weight:600;color:var(--navy);margin-top:0.6rem;line-height:1.4;">BizStarts Milwaukee · Speaking Highlight</div>
+        </div>
+        <div style="padding-top:0.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;">BizStarts Milwaukee</div>
+          <p style="font-size:0.95rem;color:#4a5568;line-height:1.7;">Alan delivering operational excellence principles to Milwaukee's entrepreneurial community — bringing Lean Six Sigma thinking to small business owners in an accessible, engaging format.</p>
+        </div>
+      </div>
+      <div class="video-grid">
+        <div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/ZpGvFpJSQ2A" title="GMUL Urban League" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-label">Greater Milwaukee Urban League · Black &amp; White Ball Feature with Baird</div>
+        </div>
+        <div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/JOjNgIiohwg" title="Project Pitch It" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-label">Project Pitch It · Pitch Competition Feature</div>
+        </div>
+        <div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/8XcY6-mueMA" title="NBA.com Top Milwaukee Restaurants" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-label">Milwaukee Local News · Named Among NBA.com's Top Milwaukee Restaurants</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODCAST SECTION -->
+    <div class="podcast-section fade-up">
+      <div class="podcast-section-label">Podcast Appearances</div>
+      <div class="podcast-grid">
+        <div class="podcast-card">
+          <div class="podcast-show">Real Food Brands Podcast · Ep. 80</div>
+          <div class="podcast-title">4 Ways to Improve Efficiency and Drive Value Using Lean Principles</div>
+          <a href="https://podcasts.apple.com/us/podcast/food-business-marketing-podcast-brand-strategy-decisions/id1366289804?i=1000513390462" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">The Zenquest of Leaders · Jess Ollenburg</div>
+          <div class="podcast-title">Alan Goodman: Leadership, Quality Excellence, Lean Six Sigma &amp; Youth Development</div>
+          <a href="https://podcasts.apple.com/us/podcast/the-zenquest-of-leaders-with-host-jess-ollenburg/id1685922981?i=1000611476860" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">Quality Time with MoreSteam · Ep. 6</div>
+          <div class="podcast-title">Alan Goodman's Many Championship Seasons (Part 1)</div>
+          <a href="https://podcasts.apple.com/us/podcast/quality-time-with-moresteam/id1737228208?i=1000658558314" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">Quality Time with MoreSteam · Ep. 7</div>
+          <div class="podcast-title">Alan Goodman's Many Championship Seasons (Part 2)</div>
+          <a href="https://podcasts.apple.com/us/podcast/quality-time-with-moresteam/id1737228208?i=1000660136056" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">WLEI · Lean Enterprise Institute</div>
+          <div class="podcast-title">Teaching Lean Thinking to Kids: A Conversation with Alan Goodman</div>
+          <a href="https://podcasts.apple.com/us/podcast/wlei-lean-enterprise-institutes-podcast/id1360247868?i=1000653314793" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">Doing Business in Milwaukee</div>
+          <div class="podcast-title">Life is Sweet! Featuring Alan Goodman · Vol. 7</div>
+          <a href="https://podcasts.apple.com/us/podcast/life-is-sweet-featuring-alan-goodman-vol-7/id1537349686?i=1000502124348" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">Experience Milwaukee · MKE Black</div>
+          <div class="podcast-title">EXP MKE + MKE Black: A. Goodman's Desserts</div>
+          <a href="https://podcasts.apple.com/us/podcast/exp-mke-mke-black-a-goodmans-desserts/id1439689663?i=1000613664813" target="_blank" class="podcast-listen">Listen on Apple Podcasts →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-show">Real Food Brands Podcast · Video</div>
+          <div class="podcast-title">4 Ways to Improve Efficiency and Drive Value — Video Episode</div>
+          <a href="https://youtu.be/hLmQKRPlR_U" target="_blank" class="podcast-listen">Watch on YouTube →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-cta fade-up">
+      <div>
+        <div class="media-cta-text">Media &amp; Press Inquiries Welcome</div>
+        <div class="media-cta-sub">For interviews, features, and press kit requests — reach out directly.</div>
+      </div>
+      <a href="#contact" class="btn-primary">Contact for Media</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS STRIP -->
+<div class="press-strip">
+  <div class="press-inner">
+    <div class="press-label">Featured In</div>
+    <div class="press-cards">
+      <div class="press-card">
+        <div class="press-outlet">Milwaukee Journal Sentinel</div>
+        <div class="press-headline">A 'Shark Tank'-style business competition returns to Milwaukee's near west side</div>
+        <div class="press-year">2022</div>
+      </div>
+      <div class="press-card">
+        <div class="press-outlet">BizTimes Milwaukee</div>
+        <div class="press-headline">Rev-Up MKE is revitalizing Milwaukee's near west side by fostering entrepreneurship</div>
+        <div class="press-year">2024</div>
+      </div>
+      <div class="press-card">
+        <div class="press-outlet">AARP</div>
+        <div class="press-headline">Black Owners' Success Secrets — Make Your Move Grant Winner</div>
+        <div class="press-year">2020</div>
+      </div>
+      <div class="press-card">
+        <div class="press-outlet">Milwaukee NNS</div>
+        <div class="press-headline">From the corporate world to baking entrepreneur: Alan Goodman's story</div>
+        <div class="press-year">2022</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow" style="color:var(--gold)">Get in Touch</div>
+    <h2 class="section-title">Let's Build Something Together</h2>
+    <div class="contact-grid">
+      <div class="contact-info fade-up">
+        <p style="color:rgba(255,255,255,0.6);line-height:1.8;font-size:1rem;">Whether you're looking for a keynote speaker, a fractional COO, or someone to help your organization transform from the inside out — the conversation starts here.</p>
+        <div class="contact-item">
+          <div class="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="contact-label">Location</div><div class="contact-value">Milwaukee, Wisconsin</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="contact-label">Email</div><div class="contact-value">alan@agoodmansconsulting.com</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <div><div class="contact-label">LinkedIn</div><div class="contact-value"><a href="https://www.linkedin.com/in/alandgoodman/" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.8);text-decoration:none;">linkedin.com/in/alandgoodman</a></div></div>
+        </div>
+          <div class="contact-label" style="margin-bottom:1rem;">Speaking Fees</div>
+          <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--gold);">Available Upon Request</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.4);margin-top:0.3rem;">Keynote · Workshop · Fractional engagements</div>
+        </div>
+      </div>
+      <div class="contact-form fade-up">
+        <div class="form-row">
+          <input type="text" placeholder="First Name" />
+          <input type="text" placeholder="Last Name" />
+        </div>
+        <input type="email" placeholder="Email Address" />
+        <input type="text" placeholder="Organization / Company" />
+        <select><option value="" disabled selected>I'm inquiring about...</option><option>Keynote Speaking</option><option>Fractional COO / Consulting</option><option>Leadership Development</option><option>Workforce Development Strategy</option><option>Media / Press</option><option>General Inquiry</option></select>
+        <textarea placeholder="Tell me about your event, organization, or need..."></textarea>
+        <button class="btn-primary" onclick="handleContact(event)" style="text-align:center;">Send Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">A <span>Goodman's</span> Consulting LLC</div>
+    <div class="footer-copy">© 2025 A Goodman's Consulting LLC · Milwaukee, WI · agoodmansconsulting.com</div>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#speaking">Speaking</a></li>
+      <li><a href="#consulting">Consulting</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://www.linkedin.com/in/alandgoodman/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://agoodmansdesserts.com" target="_blank" rel="noopener">A Goodman's Desserts</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  function handleWaitlist(e) {
+    e.preventDefault();
+    const btn = e.target;
+    const form = btn.closest('.waitlist-form');
+    const inputs = form.querySelectorAll('input, select');
+    const data = { type: 'Waitlist', name: inputs[0].value, email: inputs[1].value, org: inputs[2].value, role: inputs[3].value };
+    fetch('https://formspree.io/f/xwvzgjqk', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+      .then(r => { if (r.ok) { btn.textContent = "✓ You're on the list!"; btn.style.background = '#2d6a4f'; btn.style.color = 'white'; btn.disabled = true; } else { btn.textContent = 'Something went wrong — try again'; } })
+      .catch(() => { btn.textContent = 'Something went wrong — try again'; });
+  }
+  function handleContact(e) {
+    e.preventDefault();
+    const btn = e.target;
+    const form = btn.closest('.contact-form');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    const data = { type: 'Contact', firstName: inputs[0].value, lastName: inputs[1].value, email: inputs[2].value, org: inputs[3].value, inquiry: inputs[4].value, message: inputs[5].value };
+    fetch('https://formspree.io/f/xwvzgjqk', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+      .then(r => { if (r.ok) { btn.textContent = '✓ Message Sent — Alan Will Be in Touch'; btn.style.background = '#2d6a4f'; btn.style.color = 'white'; btn.disabled = true; } else { btn.textContent = 'Something went wrong — try again'; } })
+      .catch(() => { btn.textContent = 'Something went wrong — try again'; });
+  }
+  window.addEventListener('scroll', () => { document.getElementById('navbar').style.boxShadow = window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.3)' : 'none'; });
+</script>
+</body>
+</html>
